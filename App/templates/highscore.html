@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block page %}Login{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    {% if current_user.is_authenticated %}
+    <h3> Hi {{ current_user.username }} the following are your highscores: </h3>
+
+    <div class="row">
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th><th>Highscore</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        <tbody>
+      </table>
+    </div>
+    {% endif %}
+
+{% endblock %}

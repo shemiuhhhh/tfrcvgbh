@@ -1,0 +1,39 @@
+select {
+    display: inline!important;
+}
+
+.btn, .btn-large, .btn-small {
+    color: #fff !important;
+    background-color: #4918ce !important;
+}
+
+.purple {
+    background-color: #4918ce !important;
+}
+
+
+#foot {
+    margin-top: auto;
+    position: fixed;
+    padding: 10px 10px 0px 10px;
+    bottom: 0;
+    width: 100%;
+            /* Height of the footer*/ 
+    /*height: 40px;*/
+    background: #4918ce ;
+    text-align: center;
+  padding: 3px;
+  
+  color: white;
+}
+
+.play, .submit{
+    margin-bottom: 150px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+  }

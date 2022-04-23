@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Spelling B Game{% endblock %}
+{% block page %}Flask MVC App{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    <h2>Spelling B Game!</h2>
+    {% if current_user.is_authenticated %}
+    <h4> Hi {{ current_user.username }}! </h4>
+    {% endif %}
+    <p>This is a Spelling B Game! There are two versions of the game that can be played. There's the regular Spelling B without time limits and there's the Rapid Word Round which only gives you one minute to spell as many words as possible! Play as many times as you like!
+        <br>
+        <br>Note: Only users with accounts can play the Rapid Word Round version!
+    </p>
+    <centre><img src="https://d2v9ipibika81v.cloudfront.net/uploads/sites/256/bee2-f-1.jpg" width = "40%" class ="center">
+    </centre>
+    <tbody id="result">
+     <tbody>
+
+    
+{% endblock %}
+

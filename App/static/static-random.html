@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+  <head>
+  
+    <link rel="stylesheet" href="style.css">
+     <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>App Users</title>
+
+  </head>
+  <body>
+    <nav class="purple">
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo center">Random Word</a>
+        <div class="nav-wrapper">
+            <ul id="nav-mobile" class="left">
+                <li><a href="/">Home</a></li>
+                <li><a href="/users">Users Jinja</a></li>
+                <li><a href="/static/users">Users JS</a></li>
+                <li><a href="/static/static-random.html">Random Word</a></li>
+                <li><a href="/static/static-rapid.html">Rapid Word</a></li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="container" id="content">
+        <div class="row">
+            <p>
+                Should display random word from  <a href = "https://random-word-api.herokuapp.com/home" target = "_blank"> random word  </a> api.
+            </p>
+        </div>
+        <div class="row">
+           
+        </div>
+      <h1>Spelling B Unlimited!</h1>
+
+    <p>Click the "Play Word" button to hear the word that needs to be spelt. Listen carefully and wait until the voice is finished speaking to enter the word. When you think you've spelt the word correctly press enter or click the "Submit" button. The rate and pitch can be adjusted as desired to enhance your experience.</p>
+    
+    <label id ="score">Score:0</label><br>
+    <input type="hidden" id="hide" name="custId" value="" class="hidden">
+      <form>
+      <input type="text" class="txt" id="word">
+      <div>
+        <label for="rate">Rate</label><input type="range" min="0.5" max="2" value="1" step="0.1" id="rate">
+        <div class="rate-value">1</div>
+        <div class="clearfix"></div>
+      </div>
+      <div>
+        <label for="pitch">Pitch</label><input type="range" min="0" max="2" value="1" step="0.1" id="pitch">
+        <div class="pitch-value">1</div>
+        <div class="clearfix"></div>
+      </div>
+      <select>
+  
+      </select>
+      <div class="controls">
+        <button id="play" class="play" type= "button">Play Word</button>
+        <button id="submit" class="submit" type="submit">Submit</button>
+  
+      </div>
+      </form>
+    </div>
+
+    <script>
+      async function getRandomWord(url){
+            let response = await fetch(url);
+            let result = await response.json();
+
+            displayRand(result);
+
+          //performs an ajax request to the spcified url to get pokemon data then pass it to displayListing()
+     }
+		
+	function displayRand(w){
+          let result = document.querySelector('#rand');
+          let html = 'Spell the word ';
+		  html+=`${w}`+ ', again the word is, ' + `${w}`;
+		  
+		  currentWord = '';
+		  currentWord += `${w}`;
+		  
+		  let inputF = document.getElementById("hide");
+		  //let element = document.querySelector('.txt');
+		  
+		  inputF.value = html; 
+		  //element.value = html;
+		  
+          //result.innerHTML = html;
+		  console.log(w);
+		  if(score >0){
+			speak();
+		  }
+
+           //Renders a list of pokemon links to the page  
+        }
+
+getRandomWord("https://random-word-api.herokuapp.com/word");
+
+var synth = window.speechSynthesis;
+
+var submmitWord = document.querySelector('.submit');
+var inputForm = document.querySelector('.play');
+var inputTxt = document.querySelector('.hidden');
+var voiceSelect = document.querySelector('select');
+
+var pitch = document.querySelector('#pitch');
+var pitchValue = document.querySelector('.pitch-value');
+var rate = document.querySelector('#rate');
+var rateValue = document.querySelector('.rate-value');
+
+var voices = [];
+var responseCount = 0;
+var score = 0;
+var currentWord= '';
+var wrong = 0;
+
+function populateVoiceList() {
+  voices = synth.getVoices().sort(function (a, b) {
+      const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+      if ( aname < bname ) return -1;
+      else if ( aname == bname ) return 0;
+      else return +1;
+  });
+  var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+  voiceSelect.innerHTML = '';
+  for(i = 0; i < voices.length ; i++) {
+  
+  //if(voices[i].name == "Microsoft Sonia Online (Natural) - English (United Kingdom)"){
+    var option = document.createElement('option');
+    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+	  //let z = voices[i];
+	  //console.log(z);
+    
+    if(voices[i].default) {
+      option.textContent += ' -- DEFAULT';
+    }
+
+    option.setAttribute('data-lang', voices[i].lang);
+    option.setAttribute('data-name', voices[i].name);
+    voiceSelect.appendChild(option);
+  //}
+	voiceSelect.selectedIndex = selectedIndex;
+	
+	
+  }
+
+  
+  voiceSelect.selectedIndex = selectedIndex;
+}
+
+function isObject(val) {
+    return val instanceof Object; 
+}
+
+populateVoiceList();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}
+
+function speak(){
+	console.log(inputTxt.value);
+    if (synth.speaking) {
+        console.error('speechSynthesis.speaking');
+        return;
+    }
+    if (inputTxt.value !== '') {
+    var utterThis = new SpeechSynthesisUtterance(inputTxt.value);
+    utterThis.onend = function (event) {
+        console.log('SpeechSynthesisUtterance.onend');
+    }
+    utterThis.onerror = function (event) {
+        console.error('SpeechSynthesisUtterance.onerror');
+    }
+    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+    for(i = 0; i < voices.length ; i++) {
+      if(voices[i].name === selectedOption) {
+        utterThis.voice = voices[i];
+        break;
+      }
+    }
+    utterThis.pitch = pitch.value;
+    utterThis.rate = rate.value;
+    synth.speak(utterThis);
+  }
+}
+
+function gradeAnswer(val){
+	var value = false;
+	
+	if (val == currentWord){
+		console.log('Thee current word is ' + currentWord);
+		console.log("User Supplied answer is correct");
+		value = true;
+		return value;
+	}
+	else{
+		console.log('Thee current word is ' + currentWord);
+		console.log("User Supplied answer is wrong");
+		value = false;
+		return value;
+	}
+}
+
+inputForm.onclick = function(event) {
+  event.preventDefault();
+
+  speak();
+
+  inputTxt.blur();
+}
+
+submmitWord.onclick = function(event) {
+  event.preventDefault();
+  var scoreString = '';//String used to concatinate and display to label element
+  var suppliedAnswer = ''; //String used to store the raw data from inputWord.value
+  var answer = false;
+  var inputWord = document.querySelector('.txt');
+  var inputW = document.getElementById("word");
+  var empty = '';
+  
+  suppliedAnswer += inputWord.value;
+  suppliedAnswer = suppliedAnswer.toLowerCase();
+  console.log('The suppliedAnswer is '+ suppliedAnswer);
+
+  
+  answer = gradeAnswer(suppliedAnswer);
+  console.log('Answer is '+ answer);
+  
+  if(answer == true){
+	score = score+1;
+	scoreString += 'Score: ' + score;
+	let scoreDisplay = document.querySelector('#score');
+  inputW.value = empty;
+	
+	
+	scoreDisplay.innerHTML = scoreString;
+	getRandomWord("https://random-word-api.herokuapp.com/word");
+	
+  }else if(answer == false){
+    wrong = wrong + 1;
+    inputW.value = empty;
+  }
+  
+  responseCount += 1;
+  console.log("The score is : "+score);
+}
+
+pitch.onchange = function() {
+  pitchValue.textContent = pitch.value;
+}
+
+rate.onchange = function() {
+  rateValue.textContent = rate.value;
+}
+
+voiceSelect.onchange = function(){
+  speak();
+}
+
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+  
+    <link rel="icon" href="https://www.kindpng.com/picc/m/303-3031528_bee-icon-png-download-icon-transparent-png.png">
+     <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}{% endblock %}</title>
+
+  </head>
+  <body>
+    <nav class="purple">
+      <div class="nav-wrapper">
+        <!--<a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>-->
+        <div class="nav-wrapper">
+            <ul id="nav-mobile" class="left">
+                <li><a href="/">Home</a></li>
+                <li><a href="/info">About</a></li>
+                <li><a href="/users">Users</a></li>
+                <li><a href="/randomword">Spelling B Unlimited</a></li>
+                <!--<li><a href="/static/users">Users JS</a></li>-->
+                {% if current_user.is_authenticated %}
+                <li><a href="/rapidword">Rapid Word</a></li>
+                {% else %}
+                <li><a href="/signup" >Sign Up</a></li>
+                <li><a href="/login" >Login</a></li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                  <li><a href="/logout">Logout</a></li>
+                {% endif %}
+            </ul>
+        </div>
+      </div>
+    </nav>
+    
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <nav class="white black-text" style="padding: 10px">
+      <div class="nav-wrapper">
+          <ul class="flashes">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+      </div>
+    </nav>
+
+    {% endif %}
+    {% endwith %}
+
+    <div class="container" id="content">{% block content %}{% endblock %}</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <footer id ="foot">
+      <p>UI Design and Logic Done by Shemiah Superville<br>
+      816024952<br>
+      <a href="mailto:shemiah.superville@my.uwi.edu">shemiah.superville@my.uwi.edu</a></p>
+    </footer>
+  </body>
+
+ 
+</html>
